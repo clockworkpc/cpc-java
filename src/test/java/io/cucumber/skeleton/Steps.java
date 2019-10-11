@@ -1,6 +1,8 @@
 package io.cucumber.skeleton;
 
 import io.cucumber.java.en.Given;
+import io.cucumber.java.en.When;
+import io.cucumber.java.en.Then;
 
 public class Steps {
     @Given("I have {int} cukes in my belly")

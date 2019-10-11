@@ -1,6 +1,7 @@
 package io.cucumber.skeleton;
 
 import io.cucumber.java.en.Given;
+import io.cucumber.java.en.Then;
 
 public class IsbnFetcherSteps {
   @Given("the box title is {string}")

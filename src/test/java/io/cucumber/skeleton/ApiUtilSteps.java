@@ -1,6 +1,7 @@
 package io.cucumber.skeleton;
 
 import io.cucumber.java.en.Given;
+import io.cucumber.java.en.When;
 
 public class ApiUtilSteps {
   @Given("I make an API call to {string} with {string}")
