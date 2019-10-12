@@ -1,5 +1,7 @@
 package io.cucumber.skeleton;
 
+import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class IsbnFetcher {
@@ -71,6 +73,7 @@ public class IsbnFetcher {
 
     //  05: Return a Map wherein all the values that would come from the API response are simply "N/A"
     //  The response code will always be "200" if this method is called, but it must not be hard-coded
+    //  Refactor this code if there is a better way to do it
 
     public Map<String,String> detailsNotFound(String isbn, String boxLabel, String responseCode) {
         Map<String,String> notFoundBookDetails = null;
@@ -81,6 +84,13 @@ public class IsbnFetcher {
         String bindingType = "N/A";
         String pages = "N/A";
         String datePublished = "N/A";
+
+        notFoundBookDetails.put("long_title", longTitle);
+        notFoundBookDetails.put("author", author);
+        notFoundBookDetails.put("publisher", publisher);
+        notFoundBookDetails.put("bindingType", bindingType);
+        notFoundBookDetails.put("pages", pages);
+        notFoundBookDetails.put("datePublished", datePublished);
 
         // Solution in Ruby: https://github.com/clockworkpc/cpc-ruby/blob/master/lib/cpc/toolkit/isbn_fetcher.rb#L60
         return notFoundBookDetails;
