@@ -3,7 +3,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>cpc</groupId>
-    <artifactId>java-cucumber</artifactId>
+    <artifactId>java</artifactId>
     <version>0.0.1</version>
     <packaging>jar</packaging>
     <name>CPC Java Cucumber</name>

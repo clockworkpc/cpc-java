@@ -16,17 +16,23 @@ public class IsbnFetcher {
     //    It does not have to be a Map, it can be a HashMap or anything else that suits
     //    (I'm still learning the ins-and-outs of Maps in Java)
 
-    public Map<String,String> isbnDbArgs(String isbn) {
-        Map<String,String> apiRequest = null;
+    public HashMap<String,String> isbnDbArgs(String isbn) {
+        HashMap<String,String> apiRequest = new HashMap<String,String>();
         String url = "https://api2.isbndb.com/book/" + isbn + "?with_prices=0";
         String accept = "application/json";
         String authorization = ISBN_DB_API_KEY;
         String cacheControl = "no-cache";
 
+        apiRequest.put("url", url);
+        apiRequest.put("accept", accept);
+        apiRequest.put("authorization", authorization);
+        apiRequest.put("cacheControl", cacheControl);
+
         return apiRequest;
     }
 
     //    03: Ternary conditional.  In Ruby it's a one-liner, but I suppose in Java you have to do the following.
+    //    Is there a more elegant way of expressing this in Java?
     //    Solution in Ruby: https://github.com/clockworkpc/cpc-ruby/blob/master/lib/cpc/toolkit/isbn_fetcher.rb#L32
 
     public String detailValue(String value) {
@@ -35,6 +41,18 @@ public class IsbnFetcher {
         } else {
             return "N/A";
         }
+    }
+
+    public HashMap<String,String> collectDetailsBookFoundTrue(String isbn, String boxLabel, String apiResponseCode, HashMap apiResponseBodyBook) {
+        HashMap<String,String> bookDetails = new HashMap<String,String>();
+
+        bookDetails.put("isbn", isbn);
+        bookDetails.put("boxLabel", boxLabel);
+        bookDetails.put("apiResponseCode", apiResponseCode);
+
+//        For-each loop to add the key value pairs from apiResponseBodyBook to bookDetails
+
+        return bookDetails;
     }
 
     //    04: Make an API call to ISBNdb.com,
@@ -65,8 +83,8 @@ public class IsbnFetcher {
     //    pages = "N/A"
     //    date_published = "N/A"
 
-    public Map<String,String> bookDetails(String isbn, String boxLabel) {
-        Map<String,String> myBookDetails = null;
+    public HashMap<String,String> bookDetails(String isbn, String boxLabel) {
+        HashMap<String,String> myBookDetails = new HashMap<String,String>();
         // Solution in Ruby: https://github.com/clockworkpc/cpc-ruby/blob/master/lib/cpc/toolkit/isbn_fetcher.rb#L36
         return myBookDetails;
     }
