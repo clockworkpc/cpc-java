@@ -4,7 +4,7 @@
 /out/
 /lib
 /build/
-/.gradle/
+#/.gradle/
 /bin
 .classpath
 .project
