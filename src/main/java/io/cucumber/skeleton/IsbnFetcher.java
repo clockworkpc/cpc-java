@@ -13,7 +13,7 @@ public class IsbnFetcher {
 
     //    02: Return the following set key-value pairs
     //    Refer to the API documentation for ISBNdb.com: https://isbndb.com/apidocs/v2
-    //    It does not have to be a Map, it can be a HashMap or anything else that suits
+    //    It does not have to be a HashMap, it can be any Map you deem suitable
     //    (I'm still learning the ins-and-outs of Maps in Java)
 
     public HashMap<String,String> isbnDbArgs(String isbn) {
@@ -43,17 +43,49 @@ public class IsbnFetcher {
         }
     }
 
-    public HashMap<String,String> collectDetailsBookFoundTrue(String isbn, String boxLabel, String apiResponseCode, HashMap apiResponseBodyBook) {
-        HashMap<String,String> bookDetails = new HashMap<String,String>();
+    //    04: Package the ISBN, box label, API response code, and all the book details into a single HashMap.
+    //    This method is invoked by the main method BookDetails() IF the API response code is "200"
+
+    public HashMap<String,String> collectDetailsBookFoundTrue(String isbn, String boxLabel, String apiResponseCode, HashMap<String,String> apiResponseBodyBook) {
+        HashMap<String,String> bookDetails = new HashMap();
 
         bookDetails.put("isbn", isbn);
         bookDetails.put("boxLabel", boxLabel);
         bookDetails.put("apiResponseCode", apiResponseCode);
 
-//        For-each loop to add the key value pairs from apiResponseBodyBook to bookDetails
+        apiResponseBodyBook.forEach((key,value) -> {
+            bookDetails.put(key, value);
+        });
 
         return bookDetails;
     }
+
+    //    04: Package the ISBN, box label, API response code, and "N/A" in all the fields into a single HashMap.
+    //    This method is invoked by the main method BookDetails() UNLESS the API response code is "200"
+
+    public Map<String,String> collectDetailsBookFoundFalse(String isbn, String boxLabel, String apiResponseCode) {
+        Map<String,String> notFoundBookDetails = new HashMap<>();
+
+        String longTitle = "N/A";
+        String author = "N/A";
+        String publisher = "N/A";
+        String bindingType = "N/A";
+        String pages = "N/A";
+        String datePublished = "N/A";
+
+        notFoundBookDetails.put("isbn", isbn);
+        notFoundBookDetails.put("boxLabel", boxLabel);
+        notFoundBookDetails.put("apiResponseCode", apiResponseCode);
+        notFoundBookDetails.put("longTitle", longTitle);
+        notFoundBookDetails.put("author", author);
+        notFoundBookDetails.put("publisher", publisher);
+        notFoundBookDetails.put("bindingType", bindingType);
+        notFoundBookDetails.put("pages", pages);
+        notFoundBookDetails.put("datePublished", datePublished);
+
+        return notFoundBookDetails;
+    }
+
 
     //    04: Make an API call to ISBNdb.com,
     //    Parse the API response (JSON response body)
@@ -93,27 +125,7 @@ public class IsbnFetcher {
     //  The response code will always be "200" if this method is called, but it must not be hard-coded
     //  Refactor this code if there is a better way to do it
 
-    public Map<String,String> detailsNotFound(String isbn, String boxLabel, String responseCode) {
-        Map<String,String> notFoundBookDetails = null;
 
-        String longTitle = "N/A";
-        String author = "N/A";
-        String publisher = "N/A";
-        String bindingType = "N/A";
-        String pages = "N/A";
-        String datePublished = "N/A";
-
-        notFoundBookDetails.put("long_title", longTitle);
-        notFoundBookDetails.put("author", author);
-        notFoundBookDetails.put("publisher", publisher);
-        notFoundBookDetails.put("bindingType", bindingType);
-        notFoundBookDetails.put("pages", pages);
-        notFoundBookDetails.put("datePublished", datePublished);
-
-        // Solution in Ruby: https://github.com/clockworkpc/cpc-ruby/blob/master/lib/cpc/toolkit/isbn_fetcher.rb#L60
-        return notFoundBookDetails;
-    }
-    
 //    06: Take the Map of book details and a CSV filepath string as parameters
 //    Create a new a CSV file at the filepath
 //    Use the keys from the Map as the CSV headers

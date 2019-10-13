@@ -40,7 +40,7 @@ public class IsbnFetcherTest {
         assertEquals(testApiRequest, apiRequest);
     }
 
-    @DisplayName("Ternary conditional for handling null values in API response body")
+    @DisplayName("Ternary conditional for handling null values returned from API response body")
     @Test
     public void testDetailValue() {
         IsbnFetcher isbnFetcher = new IsbnFetcher();
@@ -50,7 +50,7 @@ public class IsbnFetcherTest {
 
     @DisplayName("Collect Book Details if entry found in DB")
     @Test
-    public void testCollectBookDetailsBookFoundTrue () {
+    public void testCollectBookDetailsBookFoundTrue() {
         IsbnFetcher isbnFetcher = new IsbnFetcher();
         String isbn = "9781931499651";
         String boxLabel = "01 - Knitting Books";
@@ -65,6 +65,7 @@ public class IsbnFetcherTest {
         String pages = "128";
         String datePublished = "2005";
 
+        // What the return value of the method should look contain
         testApiResponseBodyBook.put("isbn", isbn);
         testApiResponseBodyBook.put("boxLabel", boxLabel);
         testApiResponseBodyBook.put("apiResponseCode", apiResponseCode);
@@ -75,6 +76,7 @@ public class IsbnFetcherTest {
         testApiResponseBodyBook.put("pages", pages);
         testApiResponseBodyBook.put("datePublished", datePublished);
 
+        // The contents of the apiResponseBodyBook HashMap, converted originally from JSON elsewhere
         inputApiResponseBodyBook.put("longTitle", longTitle);
         inputApiResponseBodyBook.put("author", author);
         inputApiResponseBodyBook.put("publisher", publisher);
@@ -83,6 +85,36 @@ public class IsbnFetcherTest {
         inputApiResponseBodyBook.put("datePublished", datePublished);
 
         assertEquals(testApiResponseBodyBook, isbnFetcher.collectDetailsBookFoundTrue(isbn, boxLabel, apiResponseCode, inputApiResponseBodyBook));
+    }
+
+    @DisplayName("Collect Book Details if entry NOT found in DB")
+    @Test
+    public void testCollectDetailsBookFoundFalse() {
+        IsbnFetcher isbnFetcher = new IsbnFetcher();
+        String isbn = "9781931499651";
+        String boxLabel = "01 - Knitting Books";
+        String apiResponseCode = "200";
+        HashMap<String,String> testApiResponseBodyBook = new HashMap<>();
+
+        String longTitle = "N/A";
+        String author = "N/A";
+        String publisher = "N/A";
+        String bindingType = "N/A";
+        String pages = "N/A";
+        String datePublished = "N/A";
+
+        // What the return value of the method should look contain
+        testApiResponseBodyBook.put("isbn", isbn);
+        testApiResponseBodyBook.put("boxLabel", boxLabel);
+        testApiResponseBodyBook.put("apiResponseCode", apiResponseCode);
+        testApiResponseBodyBook.put("longTitle", longTitle);
+        testApiResponseBodyBook.put("author", author);
+        testApiResponseBodyBook.put("publisher", publisher);
+        testApiResponseBodyBook.put("bindingType", bindingType);
+        testApiResponseBodyBook.put("pages", pages);
+        testApiResponseBodyBook.put("datePublished", datePublished);
+
+        assertEquals(testApiResponseBodyBook, isbnFetcher.collectDetailsBookFoundFalse(isbn, boxLabel, apiResponseCode));
     }
 
     @DisplayName("VERY IMPORTANT: Check Book Details")
