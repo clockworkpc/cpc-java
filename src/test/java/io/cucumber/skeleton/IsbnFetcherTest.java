@@ -2,6 +2,8 @@ package io.cucumber.skeleton;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -44,8 +46,8 @@ public class IsbnFetcherTest {
     @Test
     public void testDetailValue() {
         IsbnFetcher isbnFetcher = new IsbnFetcher();
-        assertEquals(isbnFetcher.detailValue(null), "N/A");
-        assertEquals(isbnFetcher.detailValue("Hello, World!"), "Hello, World!");
+        assertEquals(isbnFetcher.bookDetailValue(null), "N/A");
+        assertEquals(isbnFetcher.bookDetailValue("Hello, World!"), "Hello, World!");
     }
 
     @DisplayName("Collect Book Details if entry found in DB")
@@ -117,14 +119,67 @@ public class IsbnFetcherTest {
         assertEquals(testApiResponseBodyBook, isbnFetcher.collectDetailsBookFoundFalse(isbn, boxLabel, apiResponseCode));
     }
 
-    @DisplayName("VERY IMPORTANT: Check Book Details")
-    @Test
-    public void testBookDetails() {
+
+    //    THE MOST IMPORTANT METHOD OF ALL: THIS IS WHERE IT ALL COMES TOGETHER
+
+    //    06: Make an API call to ISBNdb.com,
+    //    Parse the API response (JSON response body),
+    //    and return a Map containing the ISBN, Response Code, Box Label, and Book Details
+
+    //    These details must include the following:
+    //    IF the API Response code is "200" THEN invoke collectBookDetailsFoundTrue()
+    //    ELSE invoke collectBookDetailsFoundFalse()
+
+    //    NOTE: Sometimes the API Response is "200" but some fields in the body are null:
+    //    Make sure that collectBookDetailsFoundTrue uses the bookDetailValue to account for null values
+
+    @DisplayName("Book Details -- 200 and 404")
+    @ParameterizedTest
+    @ValueSource(strings = {"9781931499651", "661741006715"})
+    void testCollectBookDetails(String isbn) {
         IsbnFetcher isbnFetcher = new IsbnFetcher();
-        String isbn = "9781931499651";
         String boxLabel = "01 - Knitting Books";
-        HashMap sampleBookDetails = isbnFetcher.bookDetails(isbn, boxLabel);
+        HashMap<String,String> bookDetails = isbnFetcher.collectBookDetails(isbn, boxLabel);
+
+//        We know from testing:
+//        ISBN "9781931499651" return "200",
+//        ISBN "661741006715" return "200".
+
+//        Therefore,
+//        if the isbn is "9781931499651",
+//        collectBookDetails should return the full complement of book details,
+//        if the isbn is "661741006715",
+//        collectBookDetails should return "N/A" for all the book detail values.
+
+        String longTitle = "Knitting Vintage Socks";
+        String author = "Nancy Bush";
+        String publisher = "Interweave";
+        String bindingType = "Spiral-bound";
+        String pages = "128";
+        String datePublished = "2005";
+
+
+        if (isbn.matches("9781931499651")) {
+            assertEquals("9781931499651", bookDetails.get("isbn"));
+            assertEquals("200", bookDetails.get("apiResponseCode"));
+            assertEquals(boxLabel, bookDetails.get("boxLabel"));
+            assertEquals(longTitle, bookDetails.get("longTitle"));
+            assertEquals(author, bookDetails.get("author"));
+            assertEquals(publisher, bookDetails.get("publisher"));
+            assertEquals(bindingType, bookDetails.get("bindingType"));
+            assertEquals(pages, bookDetails.get("pages"));
+            assertEquals(datePublished, bookDetails.get("datePublished"));
+
+        } else if (isbn.matches("661741006715")) {
+            assertEquals("661741006715", bookDetails.get("isbn"));
+            assertEquals("404", bookDetails.get("apiResponseCode"));
+            assertEquals(boxLabel, bookDetails.get("boxLabel"));
+            assertEquals("N/A", bookDetails.get("longTitle"));
+            assertEquals("N/A", bookDetails.get("author"));
+            assertEquals("N/A", bookDetails.get("publisher"));
+            assertEquals("N/A", bookDetails.get("bindingType"));
+            assertEquals("N/A", bookDetails.get("pages"));
+            assertEquals("N/A", bookDetails.get("datePublished"));
+        }
     }
-
-
 }
