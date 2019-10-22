@@ -38,7 +38,7 @@ public class IsbnFetcherTest {
         testApiRequest.put("cacheControl", cacheControl);
 
         Map<String,String> apiRequest = isbnFetcher.isbnDbArgs(isbn);
-        
+
         assertEquals(testApiRequest, apiRequest);
     }
 
@@ -59,7 +59,7 @@ public class IsbnFetcherTest {
         String apiResponseCode = "200";
         HashMap<String,String> inputApiResponseBodyBook = new HashMap<String,String>();
         HashMap<String,String> testApiResponseBodyBook = new HashMap<String,String>();
-        
+
         String longTitle = "Knitting Vintage Socks";
         String author = "Nancy Bush";
         String publisher = "Interweave";
@@ -120,18 +120,18 @@ public class IsbnFetcherTest {
     }
 
 
-    //    THE MOST IMPORTANT METHOD OF ALL: THIS IS WHERE IT ALL COMES TOGETHER
-
-    //    06: Make an API call to ISBNdb.com,
-    //    Parse the API response (JSON response body),
-    //    and return a Map containing the ISBN, Response Code, Box Label, and Book Details
-
-    //    These details must include the following:
-    //    IF the API Response code is "200" THEN invoke collectBookDetailsFoundTrue()
-    //    ELSE invoke collectBookDetailsFoundFalse()
-
-    //    NOTE: Sometimes the API Response is "200" but some fields in the body are null:
-    //    Make sure that collectBookDetailsFoundTrue uses the bookDetailValue to account for null values
+    // THE MOST IMPORTANT METHOD OF ALL: THIS IS WHERE IT ALL COMES TOGETHER
+    //
+    // 06: Make an API call to ISBNdb.com,
+    // Parse the API response (JSON response body),
+    // and return a Map containing the ISBN, Response Code, Box Label, and Book Details
+    //
+    // These details must include the following:
+    // IF the API Response code is "200" THEN invoke collectBookDetailsFoundTrue()
+    // ELSE invoke collectBookDetailsFoundFalse()
+    //
+    // NOTE: Sometimes the API Response is "200" but some fields in the body are null:
+    // Make sure that collectBookDetailsFoundTrue uses the bookDetailValue to account for null values
 
     @DisplayName("Book Details -- 200 and 404")
     @ParameterizedTest
@@ -141,15 +141,15 @@ public class IsbnFetcherTest {
         String boxLabel = "01 - Knitting Books";
         HashMap<String,String> bookDetails = isbnFetcher.collectBookDetails(isbn, boxLabel);
 
-//        We know from testing:
-//        ISBN "9781931499651" return "200",
-//        ISBN "661741006715" return "200".
-
-//        Therefore,
-//        if the isbn is "9781931499651",
-//        collectBookDetails should return the full complement of book details,
-//        if the isbn is "661741006715",
-//        collectBookDetails should return "N/A" for all the book detail values.
+        // We know from testing:
+        // ISBN "9781931499651" return "200",
+        // ISBN "661741006715" return "404".
+        //
+        // Therefore,
+        // if the isbn is "9781931499651",
+        // collectBookDetails should return the full complement of book details,
+        // if the isbn is "661741006715",
+        // collectBookDetails should return "N/A" for all the book detail values.
 
         String longTitle = "Knitting Vintage Socks";
         String author = "Nancy Bush";
@@ -157,7 +157,6 @@ public class IsbnFetcherTest {
         String bindingType = "Spiral-bound";
         String pages = "128";
         String datePublished = "2005";
-
 
         if (isbn.matches("9781931499651")) {
             assertEquals("9781931499651", bookDetails.get("isbn"));
@@ -182,4 +181,181 @@ public class IsbnFetcherTest {
             assertEquals("N/A", bookDetails.get("datePublished"));
         }
     }
+
+    @DisplayName("Write book details to a new CSV file")
+    @Test
+    void testWriteToCsv() {
+      IsbnFetcher isbnFetcher = new IsbnFetcher();
+      HashMap<String,String> bookDetails = new HashMap<String,String>();
+      String csvFilepath = "src/test/resources/fixtures/book_details_new.csv";
+
+      String isbn = "9781931499651";
+      String boxLabel = "01 - Knitting Books";
+      String apiResponseCode = "200";
+      String longTitle = "Knitting Vintage Socks";
+      String author = "Nancy Bush";
+      String publisher = "Interweave";
+      String bindingType = "Spiral-bound";
+      String pages = "128";
+      String datePublished = "2005";
+
+      bookDetails.put("isbn", isbn);
+      bookDetails.put("boxLabel", boxLabel);
+      bookDetails.put("apiResponseCode", apiResponseCode);
+      bookDetails.put("longTitle", longTitle);
+      bookDetails.put("author", author);
+      bookDetails.put("publisher", publisher);
+      bookDetails.put("bindingType", bindingType);
+      bookDetails.put("pages", pages);
+      bookDetails.put("datePublished", datePublished);
+
+      isbnFetcher.writeToCsv(bookDetails, csvFilepath);
+
+      // csv = CSV.parse(csvFilepath);
+      // bookEntry = csv.FirstRow
+
+      assertEquals(1, {MY_BOOK_ENTRY}.rows.count);
+      assertEquals("9781931499651", {MY_BOOK_ENTRY}.get("isbn"));
+      assertEquals("200", {MY_BOOK_ENTRY}.get("apiResponseCode"));
+      assertEquals(boxLabel, {MY_BOOK_ENTRY}.get("boxLabel"));
+      assertEquals(longTitle, {MY_BOOK_ENTRY}.get("longTitle"));
+      assertEquals(author, {MY_BOOK_ENTRY}.get("author"));
+      assertEquals(publisher, {MY_BOOK_ENTRY}.get("publisher"));
+      assertEquals(bindingType, {MY_BOOK_ENTRY}.get("bindingType"));
+      assertEquals(pages, {MY_BOOK_ENTRY}.get("pages"));
+      assertEquals(datePublished, {MY_BOOK_ENTRY}.get("datePublished"));
+    }
+
+    @DisplayName("Append book details to a CSV file")
+    @Test
+    void testAppendToCsv() {
+      IsbnFetcher isbnFetcher = new IsbnFetcher();
+      HashMap<String,String> bookDetails = new HashMap<String,String>();
+      String csvFilepath = "src/test/resources/fixtures/book_details_append.csv";
+
+      String isbn = "9781931499651";
+      String boxLabel = "01 - Knitting Books";
+      String apiResponseCode = "200";
+      String longTitle = "Knitting Vintage Socks";
+      String author = "Nancy Bush";
+      String publisher = "Interweave";
+      String bindingType = "Spiral-bound";
+      String pages = "128";
+      String datePublished = "2005";
+
+      bookDetails.put("isbn", isbn);
+      bookDetails.put("boxLabel", boxLabel);
+      bookDetails.put("apiResponseCode", apiResponseCode);
+      bookDetails.put("longTitle", longTitle);
+      bookDetails.put("author", author);
+      bookDetails.put("publisher", publisher);
+      bookDetails.put("bindingType", bindingType);
+      bookDetails.put("pages", pages);
+      bookDetails.put("datePublished", datePublished);
+
+      isbnFetcher.appendToCsv(bookDetails, csvFilepath);
+
+      // csv = CSV.parse(csvFilepath);
+      // bookEntry = csv.SecondRow
+
+      assertGreater(1, {MY_BOOK_ENTRY}.rows.count);
+      assertEquals("9781931499651", {MY_BOOK_ENTRY}.get("isbn"));
+      assertEquals("200", {MY_BOOK_ENTRY}.get("apiResponseCode"));
+      assertEquals(boxLabel, {MY_BOOK_ENTRY}.get("boxLabel"));
+      assertEquals(longTitle, {MY_BOOK_ENTRY}.get("longTitle"));
+      assertEquals(author, {MY_BOOK_ENTRY}.get("author"));
+      assertEquals(publisher, {MY_BOOK_ENTRY}.get("publisher"));
+      assertEquals(bindingType, {MY_BOOK_ENTRY}.get("bindingType"));
+      assertEquals(pages, {MY_BOOK_ENTRY}.get("pages"));
+      assertEquals(datePublished, {MY_BOOK_ENTRY}.get("datePublished"));
+    }
+
+    @DisplayName("Save-write book details to a new CSV")
+    @Test
+    void testSaveToCsv() {
+      IsbnFetcher isbnFetcher = new IsbnFetcher();
+      HashMap<String,String> bookDetails = new HashMap<String,String>();
+      String csvFilepath = "src/test/resources/fixtures/book_details_new_save.csv";
+
+      String isbn = "9781931499651";
+      String boxLabel = "01 - Knitting Books";
+      String apiResponseCode = "200";
+      String longTitle = "Knitting Vintage Socks";
+      String author = "Nancy Bush";
+      String publisher = "Interweave";
+      String bindingType = "Spiral-bound";
+      String pages = "128";
+      String datePublished = "2005";
+
+      bookDetails.put("isbn", isbn);
+      bookDetails.put("boxLabel", boxLabel);
+      bookDetails.put("apiResponseCode", apiResponseCode);
+      bookDetails.put("longTitle", longTitle);
+      bookDetails.put("author", author);
+      bookDetails.put("publisher", publisher);
+      bookDetails.put("bindingType", bindingType);
+      bookDetails.put("pages", pages);
+      bookDetails.put("datePublished", datePublished);
+
+      isbnFetcher.saveToCsv(bookDetails, csvFilepath);
+
+      // csv = CSV.parse(csvFilepath);
+      // bookEntry = csv.FirstRow
+
+      assertEquals(1, {MY_BOOK_ENTRY}.rows.count);
+      assertEquals("9781931499651", {MY_BOOK_ENTRY}.get("isbn"));
+      assertEquals("200", {MY_BOOK_ENTRY}.get("apiResponseCode"));
+      assertEquals(boxLabel, {MY_BOOK_ENTRY}.get("boxLabel"));
+      assertEquals(longTitle, {MY_BOOK_ENTRY}.get("longTitle"));
+      assertEquals(author, {MY_BOOK_ENTRY}.get("author"));
+      assertEquals(publisher, {MY_BOOK_ENTRY}.get("publisher"));
+      assertEquals(bindingType, {MY_BOOK_ENTRY}.get("bindingType"));
+      assertEquals(pages, {MY_BOOK_ENTRY}.get("pages"));
+      assertEquals(datePublished, {MY_BOOK_ENTRY}.get("datePublished"));
+    }
+
+    @DisplayName("Save-append book details to a CSV")
+    @Test
+    void testAppendToCsv() {
+      IsbnFetcher isbnFetcher = new IsbnFetcher();
+      HashMap<String,String> bookDetails = new HashMap<String,String>();
+      String csvFilepath = "src/test/resources/fixtures/book_details_append_save.csv";
+
+      String isbn = "9781931499651";
+      String boxLabel = "01 - Knitting Books";
+      String apiResponseCode = "200";
+      String longTitle = "Knitting Vintage Socks";
+      String author = "Nancy Bush";
+      String publisher = "Interweave";
+      String bindingType = "Spiral-bound";
+      String pages = "128";
+      String datePublished = "2005";
+
+      bookDetails.put("isbn", isbn);
+      bookDetails.put("boxLabel", boxLabel);
+      bookDetails.put("apiResponseCode", apiResponseCode);
+      bookDetails.put("longTitle", longTitle);
+      bookDetails.put("author", author);
+      bookDetails.put("publisher", publisher);
+      bookDetails.put("bindingType", bindingType);
+      bookDetails.put("pages", pages);
+      bookDetails.put("datePublished", datePublished);
+
+      isbnFetcher.appendToCsv(bookDetails, csvFilepath);
+
+      // csv = CSV.parse(csvFilepath);
+      // bookEntry = csv.SecondRow
+
+      assertGreater(1, {MY_BOOK_ENTRY}.rows.count);
+      assertEquals("9781931499651", {MY_BOOK_ENTRY}.get("isbn"));
+      assertEquals("200", {MY_BOOK_ENTRY}.get("apiResponseCode"));
+      assertEquals(boxLabel, {MY_BOOK_ENTRY}.get("boxLabel"));
+      assertEquals(longTitle, {MY_BOOK_ENTRY}.get("longTitle"));
+      assertEquals(author, {MY_BOOK_ENTRY}.get("author"));
+      assertEquals(publisher, {MY_BOOK_ENTRY}.get("publisher"));
+      assertEquals(bindingType, {MY_BOOK_ENTRY}.get("bindingType"));
+      assertEquals(pages, {MY_BOOK_ENTRY}.get("pages"));
+      assertEquals(datePublished, {MY_BOOK_ENTRY}.get("datePublished"));
+    }
+
 }
