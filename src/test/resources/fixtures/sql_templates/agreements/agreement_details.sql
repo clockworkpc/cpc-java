@@ -1,0 +1,6 @@
+SELECT
+    *
+FROM
+    RETAILER_DEPLOYMENT.agreement
+WHERE
+    id = AGREEMENT_ID

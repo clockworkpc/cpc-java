@@ -1,0 +1,6 @@
+SELECT
+    *
+FROM
+    RETAILER_DEPLOYMENT.job
+WHERE
+    job_name = JOB_NAME

@@ -160,23 +160,23 @@ public class IsbnFetcher {
         // Solution in Ruby: https://github.com/clockworkpc/cpc-ruby/blob/master/lib/cpc/toolkit/isbn_fetcher.rb#L102
     }
 
-    public void saveToCsv(HashMap<String,String> bookDetails, String csvFilepath) {
-      boolean noHeaders;
-
-      if (!File.exist?(csv_filepath)) {
-        noHeaders = true;
-      } else if (File.empty?(csv_filepath)) {
-        noHeaders = true;
-      } else {
-        noHeaders = false;
-      }
-
-      if (noHeaders == true) {
-        writeToCsv(bookDetails, csvFilepath);
-      } else {
-        appendToCsv(bookDetails, csvFilepath);
-      }
-    }
+//    public void saveToCsv(HashMap<String,String> bookDetails, String csvFilepath) {
+//      boolean noHeaders;
+//
+//      if (!File.exist?(csv_Filepath)) {
+//        noHeaders = true;
+//      } else if (File.empty?(csv_filepath)) {
+//        noHeaders = true;
+//      } else {
+//        noHeaders = false;
+//      }
+//
+//      if (noHeaders == true) {
+//        writeToCsv(bookDetails, csvFilepath);
+//      } else {
+//        appendToCsv(bookDetails, csvFilepath);
+//      }
+//    }
 
     
 
