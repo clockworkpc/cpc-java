@@ -5,7 +5,10 @@
     <groupId>cpc</groupId>
     <artifactId>java-cucumber</artifactId>
     <version>0.0.1</version>
-    <packaging>jar</packaging>
+    <modules>
+        <module>headfirst-java</module>
+    </modules>
+    <packaging>pom</packaging>
     <name>CPC Java Cucumber</name>
 
     <properties>
