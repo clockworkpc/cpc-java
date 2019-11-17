@@ -1,18 +1,11 @@
 public class Main {
   public static void main(String[] args) {
+    System.out.println("\n");
     Dog dog = new Dog("Alsatian");
-    dog.isAnimalKingdomMember();
-    dog.hasCirculatorySystem();
-    dog.isWarmBlooded();
-    dog.hasFourLegs();
+    dog.dogSummary();
 
-
-    // dog.hasCirculatorySystem();
-    // dog.breathes();
-    // dog.hasCanineDentition();
-    // dog.eats();
-    // dog.sleeps();
-    // dog.reproduce();
-    // dog.die();
+    System.out.println("\n");
+    Cat cat = new Cat("tabby");
+    cat.catSummary();
   }
 }

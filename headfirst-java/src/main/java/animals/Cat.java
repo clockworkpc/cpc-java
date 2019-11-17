@@ -1,8 +1,8 @@
-public class Dog extends Canine {
+public class Cat extends Feline {
 
   String name;
 
-  public Dog(String animalName) {
+  public Cat(String animalName) {
     this.animalName = animalName;
     setAnimalName(this.animalName);
   }
@@ -15,8 +15,8 @@ public class Dog extends Canine {
     System.out.println(domesticated());
   }
 
-  public void dogSummary() {
-    canineSummary();
+  public void catSummary() {
+    felineSummary();
     isDomesticated();
   }
 

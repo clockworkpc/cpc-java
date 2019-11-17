@@ -1,30 +1,26 @@
-public abstract class Canine extends Animal implements Mammal, Quadruped {
+public abstract class Canine extends Mammal implements Quadruped {
 
-  public String warmBlooded() {
-    return animalAttributeTemplate("warm blooded");
+  public void canineSummary() {
+    mammalSummary();
+    hasLegs();
+    hasDentition();
   }
 
-  public void isWarmBlooded() {
-    System.out.println(warmBlooded());
-  }
-
-  public String fourLegs() {
+  public String legs() {
     String legsNumber = LEGS_NUMBER + " " + "legs";
     return animalFeatureTemplate(legsNumber);
   }
 
-  public void hasFourLegs() {
-    System.out.println(fourLegs());
+  public void hasLegs() {
+    System.out.println(legs());
   }
 
+  public String dentition() {
+    return animalFeatureTemplate("a strong jaw and a prominent pre-molar");
+  }
 
+  public void hasDentition() {
+    System.out.println(dentition());
+  }
 
-
-  // public String canineDentition() {
-  //   return animalFeatureTemplate("powerful molars and incissors");
-  // }
-  //
-  // public void hasCanineDentition() {
-  //   System.out.println(canineDentition());
-  // }
 }

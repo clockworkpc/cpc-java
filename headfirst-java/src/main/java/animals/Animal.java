@@ -2,8 +2,15 @@ public abstract class Animal {
 
   String animalName;
 
-  // Attribute
+  // Summary
 
+  public void animalSummary() {
+    isAnimalKingdomMember();
+    hasCirculatorySystem();
+    canBreathe();
+  }
+
+  // Attribute
   public String animalKingdomMember() {
     return animalAttributeTemplate("a member of the Animal kingdom");
   }
@@ -13,6 +20,7 @@ public abstract class Animal {
   }
 
   // // Feature
+
 
   public String circulatorySystem() {
     return animalFeatureTemplate("a circulatory system");
@@ -24,13 +32,13 @@ public abstract class Animal {
 
   // // Ability
 
-  // public String breathe() {
-  //   return animalAbilityTemplate("breathe");
-  // }
+  public String breathe() {
+    return animalAbilityTemplate("breathe");
+  }
 
-  // public void breathes() {
-  //   System.out.println(breathe());
-  // }
+  public void canBreathe() {
+    System.out.println(breathe());
+  }
 
   public String animalAttributeTemplate(String animalAttribute) {
     return indefiniteArticle() + " " + animalName + " " + "is" + " " + animalAttribute;
